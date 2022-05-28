@@ -26,8 +26,20 @@ router.get('/loggeduser',UserController.loggedUser)
 
 
 
+router.post('/userDetails',UserController.SaveUserBasicDetails)
+router.get('/userDetails',UserController.GetUserBasicDetails)
+
+router.post('/Dashboard',UserController.DashBoardUpdate)
+
+router.get('/Dashboard',UserController.DashBoardGet)
 
 
-
+router.post("/details",UserController.DeleteUser)
+router.post("/AcceptedUsers",UserController.AcceptedUsers)
+router.get("/AcceptedUsers",UserController.AcceptedUserGet)
+router.post("/LoanStatus",UserController.LoanStatus)
+router.get("/GetDashStatus",UserController.GetDashStatus)
+router.post("/SaveUserContact",UserController.SaveUserContact)
+router.get("/FindUserContact",UserController.FindUserContactById)
 
 export default router
