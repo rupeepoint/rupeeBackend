@@ -1,7 +1,7 @@
 import UserModel from '../models/Users.js';
 import UserBasicDetails from '../models/UserBasicDetails.js';
 import AcceptedUser from '../models/AcceptedUser.js';
-import bcrypt from 'bcrypt'
+// import bcrypt from 'bcrypt'
 import DashBoard from '../models/DashBoard.js';
 import UserContact from '../models/UserContact.js';
 import jwt from 'jsonwebtoken'
