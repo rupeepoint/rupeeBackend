@@ -496,7 +496,7 @@ class UserController {
             //     maxLoanAmount: maxLoanAmount
             // })
             try {
-              const user=  await UserContact.findById(
+              const user=  await UserContact.findOne(
                     { deviceId: LoginContactId }
                 )
                 if (user!=null){
