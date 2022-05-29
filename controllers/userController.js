@@ -203,7 +203,8 @@ class UserController {
                 referenceContactOne: referenceContactOne,
                 accountNumber: accountNumber,
                 ifscCode: ifscCode,
-                bankName: bankName
+                bankName: bankName,
+                deviceId: deviceId
             })
 
             await details.save()
