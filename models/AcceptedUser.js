@@ -106,7 +106,12 @@ const userSchema = new mongoose.Schema({
        type:String,
        required: true,
        trim:true
-   }
+   },
+   deviceId: {
+    type:String,
+    required: true,
+    trim:true
+}
 })
 
 //Model Definition

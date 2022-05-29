@@ -353,11 +353,11 @@ class UserController {
     }
 
     static AcceptedUsers = async (req, res) => {
-        const { amount, phone, _id, firstName, lastName, panNumber, gender, dob, education, maritalStatus, pinCode, city, state, email, companyName, employmentType, monthlyIncome, referenceContactOne, referenceContactTwo, accountNumber, ifscCode, bankName } = req.body
+        const { deviceId, amount, phone, _id, firstName, lastName, panNumber, gender, dob, education, maritalStatus, pinCode, city, state, email, companyName, employmentType, monthlyIncome, referenceContactOne, referenceContactTwo, accountNumber, ifscCode, bankName } = req.body
 
         // console.log(req.body)
 
-        if (amount && phone && firstName && lastName && panNumber && gender && dob && education && maritalStatus && pinCode && city && state && email && companyName && employmentType && monthlyIncome && referenceContactOne && referenceContactTwo && accountNumber && ifscCode && bankName) {
+        if (deviceId && amount && phone && firstName && lastName && panNumber && gender && dob && education && maritalStatus && pinCode && city && state && email && companyName && employmentType && monthlyIncome && referenceContactOne && referenceContactTwo && accountNumber && ifscCode && bankName) {
 
             try {
                 const details = AcceptedUser({
@@ -381,7 +381,8 @@ class UserController {
                     ifscCode: ifscCode,
                     bankName: bankName,
                     phone: phone,
-                    amount: amount
+                    amount: amount,
+                    deviceId: deviceId
                 })
 
                 await details.save()
