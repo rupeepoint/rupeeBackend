@@ -497,7 +497,7 @@ class UserController {
             // })
             try {
               const user=  await UserContact.findById(
-                    { _id: LoginContactId }
+                    { deviceId: LoginContactId }
                 )
                 if (user!=null){
                     res.send(
