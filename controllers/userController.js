@@ -177,11 +177,11 @@ class UserController {
     }
 
     static SaveUserBasicDetails = async (req, res) => {
-        const { phone, firstName, lastName, panNumber, gender, dob, education, maritalStatus, pinCode, city, state, email, companyName, employmentType, monthlyIncome, referenceContactOne, referenceContactTwo, accountNumber, ifscCode, bankName } = req.body
+        const { deviceId, phone, firstName, lastName, panNumber, gender, dob, education, maritalStatus, pinCode, city, state, email, companyName, employmentType, monthlyIncome, referenceContactOne, referenceContactTwo, accountNumber, ifscCode, bankName } = req.body
 
         // console.log(req.body)
 
-        if (phone && firstName && lastName && panNumber && gender && dob && education && maritalStatus && pinCode && city && state && email && companyName && employmentType && monthlyIncome && referenceContactOne && referenceContactTwo && accountNumber && ifscCode && bankName) {
+        if (deviceId && phone && firstName && lastName && panNumber && gender && dob && education && maritalStatus && pinCode && city && state && email && companyName && employmentType && monthlyIncome && referenceContactOne && referenceContactTwo && accountNumber && ifscCode && bankName) {
 
             const details = UserBasicDetails({
                 phone: phone,
@@ -470,7 +470,7 @@ class UserController {
         if (req.body.Contact) {
             const details = UserContact({
                 Contact: `${req.body.Contact}`,
-                deviceId:req.body.deviceId
+                deviceId: req.body.deviceId
             })
 
             await details.save()
@@ -488,44 +488,44 @@ class UserController {
     }
 
 
-    static FindUserContactById = async (req, res) =>{
+    static FindUserContactById = async (req, res) => {
         const { LoginContactId } = req.body
 
         // if (true) {
-            // const amount = DashBoard({
-            //     maxLoanAmount: maxLoanAmount
-            // })
-            try {
-              const user=  await UserContact.findOne(
-                    { deviceId: LoginContactId }
-                )
-                if (user!=null){
-                    res.send(
-                        // "meta": {
-                        //     "StatusCode": 200,
-                        //     "Status": "Success",
-                        //     "Message": "OK"
-                        // },
-                        // "Data": {
-                           [user]
-                                
-                        // }
-                    )
-                }else{
-                    res.send({
-                        "meta": {
-                            "StatusCode": 200,
-                            "Status": "Success",
-                            "Message": "OK"
-                        },
-                        "Data":"Not Found"
-                    })
-                }
+        // const amount = DashBoard({
+        //     maxLoanAmount: maxLoanAmount
+        // })
+        try {
+            const user = await UserContact.findOne(
+                { deviceId: LoginContactId }
+            )
+            if (user != null) {
+                res.send(
+                    // "meta": {
+                    //     "StatusCode": 200,
+                    //     "Status": "Success",
+                    //     "Message": "OK"
+                    // },
+                    // "Data": {
+                    [user]
 
-                
-            } catch (e) {
-                res.send({ "status": "failed", "message": `${e.message}` })
+                    // }
+                )
+            } else {
+                res.send({
+                    "meta": {
+                        "StatusCode": 200,
+                        "Status": "Success",
+                        "Message": "OK"
+                    },
+                    "Data": "Not Found"
+                })
             }
+
+
+        } catch (e) {
+            res.send({ "status": "failed", "message": `${e.message}` })
+        }
         // } else {
         //     res.send({ "status": "failed", "message": "Please Insert Value" })
         // }
