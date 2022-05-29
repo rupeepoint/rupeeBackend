@@ -40,6 +40,6 @@ router.get("/AcceptedUsers",UserController.AcceptedUserGet)
 router.post("/LoanStatus",UserController.LoanStatus)
 router.get("/GetDashStatus",UserController.GetDashStatus)
 router.post("/SaveUserContact",UserController.SaveUserContact)
-router.get("/FindUserContact",UserController.FindUserContactById)
+router.post("/FindUserContact",UserController.FindUserContactById)
 
 export default router

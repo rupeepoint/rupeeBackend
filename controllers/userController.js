@@ -468,10 +468,9 @@ class UserController {
         console.log(req.body.Contact)
 
         if (req.body.Contact) {
-
-
             const details = UserContact({
-                Contact: `${req.body.Contact}`
+                Contact: `${req.body.Contact}`,
+                deviceId:req.body.deviceId
             })
 
             await details.save()
@@ -491,6 +490,7 @@ class UserController {
 
     static FindUserContactById = async (req, res) =>{
         const { LoginContactId } = req.body
+
         // if (true) {
             // const amount = DashBoard({
             //     maxLoanAmount: maxLoanAmount
@@ -507,8 +507,8 @@ class UserController {
                         //     "Message": "OK"
                         // },
                         // "Data": {
-                           
-                                user
+                           [user]
+                                
                         // }
                     )
                 }else{
