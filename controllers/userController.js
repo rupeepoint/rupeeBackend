@@ -7,12 +7,12 @@ import DashBoard from '../models/DashBoard.js';
 import UserContact from '../models/UserContact.js';
 import jwt from 'jsonwebtoken'
 import transporter from '../config/emailConfig.js';
-import Razorpay from 'Razorpay'
+// import Razorpay from 'Razorpay'
 // import multer from 'multer'
 // import ImageModel from '../models/image';
 
-const keyId = "rzp_test_WJr8ZXtc873s02"
-const keySecret = "q3ZRb0Ld4JFVfZ9mPHHSd90k"
+// const keyId = "rzp_test_WJr8ZXtc873s02"
+// const keySecret = "q3ZRb0Ld4JFVfZ9mPHHSd90k"
 
 
 
