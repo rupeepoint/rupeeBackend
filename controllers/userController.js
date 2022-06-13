@@ -1,15 +1,25 @@
 import UserModel from '../models/Users.js';
 import UserBasicDetails from '../models/UserBasicDetails.js';
 import AcceptedUser from '../models/AcceptedUser.js';
+import UpdateOrderStatus from '../models/UpdateOrderStatus.js';
 // import bcrypt from 'bcrypt'
 import DashBoard from '../models/DashBoard.js';
 import UserContact from '../models/UserContact.js';
 import jwt from 'jsonwebtoken'
 import transporter from '../config/emailConfig.js';
+import Razorpay from 'Razorpay'
 // import multer from 'multer'
 // import ImageModel from '../models/image';
 
+const keyId = "rzp_test_WJr8ZXtc873s02"
+const keySecret = "q3ZRb0Ld4JFVfZ9mPHHSd90k"
 
+
+
+// const rzpInstance = new Razorpay({
+//     key_id: keyId,
+//     key_secret: keySecret
+// })
 
 class UserController {
     static userRegistration = async (req, res) => {
@@ -177,11 +187,11 @@ class UserController {
     }
 
     static SaveUserBasicDetails = async (req, res) => {
-        const { deviceId, phone, firstName, lastName, panNumber, gender, dob, education, maritalStatus, pinCode, city, state, email, companyName, employmentType, monthlyIncome, referenceContactOne, referenceContactTwo, accountNumber, ifscCode, bankName } = req.body
+        const { deviceId, phone, firstName, lastName, panNumber, gender, dob, education, maritalStatus, pinCode, city, state, email, companyName, employmentType, monthlyIncome, referenceContactOne, referenceContactTwo, accountNumber, ifscCode, bankName, loanId, panCardUrl, adhaarFrontUrl, adhaarBackUrl, livePhotoUrl, contactNameOne, contactNameTwo } = req.body
 
-        // console.log(req.body)
+        console.log(req.body)
 
-        if (deviceId && phone && firstName && lastName && panNumber && gender && dob && education && maritalStatus && pinCode && city && state && email && companyName && employmentType && monthlyIncome && referenceContactOne && referenceContactTwo && accountNumber && ifscCode && bankName) {
+        if (deviceId && phone && firstName && lastName && panNumber && gender && dob && education && maritalStatus && pinCode && city && state && email && companyName && employmentType && monthlyIncome && referenceContactOne && referenceContactTwo && accountNumber && ifscCode && bankName && loanId && panCardUrl && adhaarFrontUrl && adhaarBackUrl && livePhotoUrl && contactNameOne && contactNameTwo) {
 
             const details = UserBasicDetails({
                 phone: phone,
@@ -204,7 +214,14 @@ class UserController {
                 accountNumber: accountNumber,
                 ifscCode: ifscCode,
                 bankName: bankName,
-                deviceId: deviceId
+                deviceId: deviceId,
+                loanId: loanId,
+                panCardUrl: panCardUrl,
+                adhaarFrontUrl: adhaarFrontUrl,
+                adhaarBackUrl: adhaarBackUrl,
+                livePhotoUrl: livePhotoUrl,
+                contactNameOne: contactNameOne,
+                contactNameTwo: contactNameTwo
             })
 
             await details.save()
@@ -245,8 +262,8 @@ class UserController {
             try {
                 await DashBoard.findByIdAndUpdate(
                     { _id: "628495a8aa14d8e085d23790" }, {
-                    $set: { maxLoanAmount: req.body.maxLoanAmount }
-                })
+                        $set: { maxLoanAmount: req.body.maxLoanAmount }
+                    })
 
                 res.send({
                     "meta": {
@@ -353,11 +370,11 @@ class UserController {
     }
 
     static AcceptedUsers = async (req, res) => {
-        const { deviceId, amount, phone, _id, firstName, lastName, panNumber, gender, dob, education, maritalStatus, pinCode, city, state, email, companyName, employmentType, monthlyIncome, referenceContactOne, referenceContactTwo, accountNumber, ifscCode, bankName } = req.body
+        const { deviceId, amount, phone, _id, firstName, lastName, panNumber, gender, dob, education, maritalStatus, pinCode, city, state, email, companyName, employmentType, monthlyIncome, referenceContactOne, referenceContactTwo, accountNumber, ifscCode, bankName, loanId, panCardUrl, adhaarFrontUrl, adhaarBackUrl, livePhotoUrl, contactNameOne, contactNameTwo, sanctionedAmount, disbursedAmount, gst, service, processingAmount, rePaymentData } = req.body
 
-        // console.log(req.body)
+        console.log(req.body)
 
-        if (deviceId && amount && phone && firstName && lastName && panNumber && gender && dob && education && maritalStatus && pinCode && city && state && email && companyName && employmentType && monthlyIncome && referenceContactOne && referenceContactTwo && accountNumber && ifscCode && bankName) {
+        if (deviceId && amount && phone && firstName && lastName && panNumber && gender && dob && education && maritalStatus && pinCode && city && state && email && companyName && employmentType && monthlyIncome && referenceContactOne && referenceContactTwo && accountNumber && ifscCode && bankName && loanId && panCardUrl && adhaarFrontUrl && adhaarBackUrl && livePhotoUrl && contactNameOne && contactNameTwo && sanctionedAmount && disbursedAmount && gst && service && processingAmount && rePaymentData) {
 
             try {
                 const details = AcceptedUser({
@@ -382,7 +399,21 @@ class UserController {
                     bankName: bankName,
                     phone: phone,
                     amount: amount,
-                    deviceId: deviceId
+                    deviceId: deviceId,
+                    loanId: loanId,
+                    panCardUrl: panCardUrl,
+                    adhaarFrontUrl: adhaarFrontUrl,
+                    adhaarBackUrl: adhaarBackUrl,
+                    livePhotoUrl: livePhotoUrl,
+                    contactNameOne: contactNameOne,
+                    contactNameTwo: contactNameTwo,
+                    sanctionedAmount: sanctionedAmount,
+                    disbursedAmount: disbursedAmount,
+                    gst: gst,
+                    service: service,
+                    processingAmount: processingAmount,
+                    rePaymentData: rePaymentData
+
                 })
 
                 await details.save()
@@ -425,9 +456,9 @@ class UserController {
 
     static LoanStatus = async (req, res) => {
 
+        console.log(req.body)
 
-        const data = await AcceptedUser.findOne({ phone: { $regex: req.body.phone } })
-
+        const data = await AcceptedUser.findOne({ loanId: { $regex: req.body.LoanId } })
         if (data) {
             res.send({
                 "meta": {
@@ -531,6 +562,114 @@ class UserController {
         // } else {
         //     res.send({ "status": "failed", "message": "Please Insert Value" })
         // }
+    }
+
+
+
+    static getOrderId = async (req, res) => {
+
+        const options = {
+            amount: req.body.amount + "00",
+            curreny: "INR",
+            payment_capture: "1"
+        }
+        const rzpInstance = new Razorpay({
+            key_id: keyId,
+            key_secret: keySecret
+        })
+
+        rzpInstance.orders.create(options, (err, order) => {
+            console.log("this   " + order)
+
+            const resObj = {
+                keyId: keyId,
+                orderId: "order.ID"
+            }
+            res.send(JSON.stringify(resObj))
+        })
+
+
+
+        // res.send({ "status": "getOrderId"})
+    }
+
+    static updateUserLoanStatus = async (req, res) => {
+        console.log(req.body)
+
+        const { deviceId, LoanId, LoanStatus, Amount, paymentLastDate, signature, pay_id, order_id, mobileNo, emailId } = req.body
+
+
+        if (deviceId && LoanId && LoanStatus && Amount && paymentLastDate && signature && pay_id && order_id && mobileNo, emailId) {
+            try {
+                const data = UpdateOrderStatus({
+                    deviceId: deviceId,
+                    LoanId: LoanId,
+                    LoanStatus: LoanStatus,
+                    Amount: Amount,
+                    paymentLastDate: paymentLastDate,
+                    signature: signature,
+                    pay_id: pay_id,
+                    order_id: order_id,
+                    mobileNo: mobileNo,
+                    emailId: emailId
+                })
+                await data.save()
+                res.send({ "status": "sucess", "message": "Status Update" })
+            } catch (err) {
+                res.send({ "status": "failed", "message": `${err.message}` })
+            }
+        } else {
+            res.send({ "status": "failed", "message": "All fields are required" })
+        }
+
+
+
+
+
+    }
+
+    static updateUserLoanStatusbyLoanId = async (req, res) => {
+        console.log(req.body)
+
+        const { deviceId, LoanId, LoanStatus, Amount, paymentLastDate, signature, pay_id, order_id, mobileNo, emailId } = req.body
+
+
+        if (deviceId && LoanId && LoanStatus && Amount && paymentLastDate && signature && pay_id && order_id && mobileNo, emailId) {
+            try {
+                
+                await UpdateOrderStatus.updateOne({ LoanId: LoanId }, {
+                    $set: { deviceId: deviceId, 
+                        LoanId: LoanId,
+                        LoanStatus: LoanStatus,
+                        Amount: Amount,
+                        paymentLastDate: paymentLastDate,
+                        signature: signature,
+                        pay_id: pay_id,
+                        order_id: order_id,
+                        mobileNo: mobileNo,
+                        emailId: emailId}
+                })
+                // await data.save()
+                res.send({ "status": "sucess", "message": "Status Update" })
+            } catch (err) {
+                res.send({ "status": "failed", "message": `${err.message}` })
+            }
+        } else {
+            res.send({ "status": "failed", "message": "All fields are required" })
+        }
+    }
+
+    static getUpdatedLoanStatus = async (req, res) => {
+        const data = await UpdateOrderStatus.find()
+        res.send(
+            //     "meta": {
+            //         "StatusCode": 200,
+            //         "Status": "Success",
+            //         "Message": "OK"
+            //     },
+            data
+
+        )
     }
 }
 
