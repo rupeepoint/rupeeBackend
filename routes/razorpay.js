@@ -7,8 +7,8 @@ import Razorpay from 'razorpay'
 
 
 const instance = new Razorpay({
-    key_id: 'rzp_test_QUFcsYoOj0f97O',
-    key_secret: '5tlWQmSTweC4wzkSKQhGcdN1',
+    key_id: 'rzp_live_W3t5DLy9LjF01F',
+    key_secret: 'KzWnnR6WUK8T4zEg9czAs7ML',
 });
 
 
@@ -25,7 +25,7 @@ router.post('/getOrderId', (req, res) => {
             res.send({ 
                 "data":{
                     orderId:data.id,
-                    key_id:"rzp_test_QUFcsYoOj0f97O"
+                    key_id:"rzp_live_W3t5DLy9LjF01F"
                 },
                 "meta": {
                     "StatusCode": 200,
