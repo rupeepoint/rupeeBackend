@@ -4,6 +4,9 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     Contact: {
         type: String
+    },
+    deviceId:{
+        type: String
     }
 })
 

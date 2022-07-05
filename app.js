@@ -4,6 +4,7 @@ import express from 'express'
 import cors from 'cors'
 import connectDb from './config/conectdb.js'
 import userRoutes from './routes/userRoutes.js'
+import razorpayroute from './routes/razorpay.js'
 import multer from 'multer'
 import bodyParser from 'body-parser'
 
@@ -29,6 +30,10 @@ app.use(express.urlencoded())
 
 //Load routes
 app.use("/api/user", userRoutes)
+
+
+//Load payment_capture
+app.use("/api/user",razorpayroute)
 
 app.listen(port, function () {
     console.log(`listening on port at https://localhost:${port}`)
